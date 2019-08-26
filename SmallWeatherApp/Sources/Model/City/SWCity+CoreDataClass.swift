@@ -39,4 +39,8 @@ public class SWCity: NSManagedObject, Decodable {
         case systemInfo = "sys"
         case mainInfo = "main"
     }
+    
+    class func fetchCity(withContext context: NSManagedObjectContext, withCityId cityId: Int) -> SWCity? {
+        return SWCity.fetchFirst(inContext: context, withPredicate: NSPredicate(format: "id == %i", cityId), withSortDescriptor: nil, includeSubentities: true) as? SWCity
+    }
 }

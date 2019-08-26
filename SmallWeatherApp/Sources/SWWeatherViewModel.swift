@@ -24,11 +24,20 @@ class SWWeatherViewModel: NSObject {
         
         DispatchQueue.concurrentPerform(iterations: listOfCitiesName.count) { (index) in
             dispatchGroup.enter()
-            SWRequestManager.shared.getWeather(withCityName: self.listOfCitiesName[index], completion: { (city, success, errorMessage, error) in
-                if success, let city = city {
-                    
-                }
+            SWRequestManager.shared.getWeather(withCityName: self.listOfCitiesName[index], completion: { (cityJson, success, errorMessage, error) in
+                let context = SWModelManager.shared.model.viewContext
                 
+                if success, let city = cityJson, let cityId = city[SWCity.CodingKeys.id.rawValue] as? Int,
+                    let oldCity = SWCity.fetchCity(withContext: context, withCityId: cityId),
+                    let cityData = city.jsonData,
+                    let newCity = try? JSONDecoder().decode(SWCity.self, from: cityData)
+                {
+                    context.delete(oldCity)
+                    _ = newCity.managedObjectContext?.saveContext()
+                } else if success, let cityData = cityJson?.jsonData {
+                    let newCity = try? JSONDecoder().decode(SWCity.self, from: cityData)
+                    _ = newCity?.managedObjectContext?.saveContext()
+                }
                 dispatchGroup.leave()
             })
         }

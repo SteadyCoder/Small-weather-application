@@ -58,7 +58,7 @@ class SWMockApiManager: SWRestAPI {
         """
         
         if let compl = completion {
-            if let data = testResponseData.data(using: .utf8), let city = try? JSONDecoder().decode(SWCity.self, from: data) {
+            if let data = testResponseData.data(using: .utf8), let city = try? JSONSerialization.jsonObject(with: data) as? [String: Any] {
                 compl(city, true, nil, nil)
             } else {
                 compl(nil, false, "Bad request", nil)

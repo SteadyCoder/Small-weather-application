@@ -29,9 +29,7 @@ class SmallWeatherAppTests: XCTestCase {
         mockApi.getWeather(withCityName: citiesName[0]) { (city, success, errorMessage, error) in
             print("error message \(errorMessage)")
             assert(success)
-            print(city?.name)
-            print(city?.id)
-            print(city?.weather?.detailDescription)
+            print(city)
         }
     }
     
