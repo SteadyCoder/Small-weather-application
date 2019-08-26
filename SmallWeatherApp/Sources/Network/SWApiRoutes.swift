@@ -15,19 +15,23 @@ enum HTTPMethod: String {
 
 protocol SWApiBase {
     static var baseUrl: URL { get }
-    var url: URL { get }
+    var urlComponents: URLComponents { get }
     var method: HTTPMethod { get }
 }
 
 class SWApiRoutes: NSObject {
-    static let apiToken = "a1d1dc41d71e2b1c1d329e64770bf088"
+    private static let apiToken = "91c38bb9e9409896a7d89912d9eb56fd"
+    private static let apiTokenQueryKey = "appid"
     
-    static let host = "api.openweathermap.org/data/2.5/"
+    static let scheme = "https"
+    static let host = "api.openweathermap.org"
     
     enum Weather: SWApiBase {
+        case city
+        
         static var baseUrl: URL {
             get {
-                return URL(string: host + "weather")!
+                return URL(string: scheme + host)!
             }
         }
         
@@ -38,14 +42,40 @@ class SWApiRoutes: NSObject {
             }
         }
         
-        case city
-        
-        var url: URL {
+        var urlComponents: URLComponents {
+            var urlComponents = URLComponents()
+            urlComponents.scheme = SWApiRoutes.scheme
+            urlComponents.host = SWApiRoutes.host
+            urlComponents.queryItems = [URLQueryItem(name: SWApiRoutes.apiTokenQueryKey, value: SWApiRoutes.apiToken)]
             switch self {
             case .city:
-                return Weather.baseUrl
+                urlComponents.path = self.path
+            }
+            return urlComponents
+        }
+        
+        func url(with queryParams: [String: String]) -> URL {
+            var urlComponents = self.urlComponents
+            urlComponents.setQueryItems(with: queryParams)
+            return urlComponents.url!
+        }
+        
+        var path: String {
+            switch self {
+            case .city:
+                return "/data/2.5/weather"
             }
         }
     }
     
+}
+
+extension URLComponents {
+    mutating func setQueryItems(with parameters: [String: String]) {
+        if self.queryItems != nil {
+            parameters.forEach({ self.queryItems?.append(URLQueryItem(name: $0.key, value: $0.value)) })
+        } else {
+            self.queryItems = parameters.map { URLQueryItem(name: $0.key, value: $0.value) }
+        }
+    }
 }

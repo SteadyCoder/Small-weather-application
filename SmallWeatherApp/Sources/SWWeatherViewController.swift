@@ -13,6 +13,9 @@ class SWWeatherViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        SWRequestManager.shared.getWeather(withCityName: "Kiev") { (success, error) in
+            print("done")
+        }
     }
 
 }
