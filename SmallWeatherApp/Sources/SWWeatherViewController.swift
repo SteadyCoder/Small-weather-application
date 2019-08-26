@@ -18,12 +18,10 @@ class SWWeatherViewController: UITableViewController {
         self.setupFetchedResultController()
         
         self.refreshControl = UIRefreshControl()
-        self.refreshControl?.tintColor = .yellow
         self.refreshControl?.addTarget(self, action: #selector(refreshDidChange(_:)), for: .valueChanged)
         
         self.refreshControl?.beginRefreshing()
         viewModel.loadCitiesData { [weak self] in
-            print("city data loaded")
             self?.tableView.reloadData()
             self?.refreshControl?.endRefreshing()
         }
@@ -60,8 +58,8 @@ extension SWWeatherViewController {
         
         cell.cityLabel.text = city.name
         cell.cityWeatherDescription.text = city.weather?.detailDescription
-        if let temp = city.info?.tempreture {
-            cell.weatherTempreture.text = "\(temp)"
+        if let temp = city.info?.celciusTempreture {
+            cell.weatherTempreture.text = temp + "º"
         }
         cell.weatherImage.backgroundColor = .yellow
         

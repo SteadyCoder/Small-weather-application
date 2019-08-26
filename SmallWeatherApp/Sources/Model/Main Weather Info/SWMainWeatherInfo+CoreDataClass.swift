@@ -27,4 +27,9 @@ public class SWMainWeatherInfo: NSManagedObject, Decodable {
     enum CodingKeys: String, CodingKey {
         case tempreture = "temp"
     }
+    
+    var celciusTempreture: String {
+        let celsiusTemp = self.tempreture - 273.15
+        return String(format: "%.0f", celsiusTemp)
+    }
 }
