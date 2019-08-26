@@ -6,6 +6,11 @@
         <relationship name="info" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="MainWeatherInfo" syncable="YES"/>
         <relationship name="systemInfo" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="SystemInfo" syncable="YES"/>
         <relationship name="weather" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Weather" syncable="YES"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
     </entity>
     <entity name="MainWeatherInfo" representedClassName=".SWMainWeatherInfo" syncable="YES">
         <attribute name="tempreture" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>

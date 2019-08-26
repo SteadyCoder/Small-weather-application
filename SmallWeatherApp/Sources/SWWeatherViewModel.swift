@@ -24,9 +24,9 @@ class SWWeatherViewModel: NSObject {
         
         DispatchQueue.concurrentPerform(iterations: listOfCitiesName.count) { (index) in
             dispatchGroup.enter()
-            SWRequestManager.shared.getWeather(withCityName: self.listOfCitiesName[index], completion: { (city, success, error) in
+            SWRequestManager.shared.getWeather(withCityName: self.listOfCitiesName[index], completion: { (city, success, errorMessage, error) in
                 if success, let city = city {
-                    _ = city.managedObjectContext?.saveContext()
+                    
                 }
                 
                 dispatchGroup.leave()

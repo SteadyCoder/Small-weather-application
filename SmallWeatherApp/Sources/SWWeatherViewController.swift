@@ -7,31 +7,62 @@
 //
 
 import UIKit
+import CoreData
 
 class SWWeatherViewController: UITableViewController {
     let viewModel = SWWeatherViewModel()
+    var fetchedResultController: NSFetchedResultsController<SWCity>?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        viewModel.loadCitiesData {
+        self.setupFetchedResultController()
+        
+        self.refreshControl = UIRefreshControl()
+        self.refreshControl?.tintColor = .yellow
+        self.refreshControl?.addTarget(self, action: #selector(refreshDidChange(_:)), for: .valueChanged)
+        
+        self.refreshControl?.beginRefreshing()
+        viewModel.loadCitiesData { [weak self] in
             print("city data loaded")
+            self?.tableView.reloadData()
+            self?.refreshControl?.endRefreshing()
         }
     }
-
+    
+    @objc func refreshDidChange(_ refreshControl: UIRefreshControl) {
+        self.viewModel.loadCitiesData {
+            self.refreshControl?.endRefreshing()
+        }
+    }
+    
+    func setupFetchedResultController() {
+        let fetchRequest: NSFetchRequest<SWCity> = SWCity.fetchRequest()
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: NSStringFromSelector(#selector(getter: SWCity.id)), ascending: true)]
+        
+        self.fetchedResultController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: SWModelManager.shared.model.viewContext, sectionNameKeyPath: nil, cacheName: nil)
+        self.fetchedResultController?.delegate = self
+        try? self.fetchedResultController?.performFetch()
+    }
 }
 
 extension SWWeatherViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.viewModel.listOfCitiesName.count
+        return self.fetchedResultController?.fetchedObjects?.count ?? 0
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: SWWeatherTableViewCell.tableCellIdentifier, for: indexPath) as! SWWeatherTableViewCell
         let row = indexPath.row
         
-        cell.cityLabel.text = self.viewModel.listOfCitiesName[row]
-        cell.cityWeatherDescription.text = "Sunny"
-        cell.weatherTempreture.text = "15º"
+        guard let city = self.fetchedResultController?.fetchedObjects?[row] else {
+            return cell
+        }
+        
+        cell.cityLabel.text = city.name
+        cell.cityWeatherDescription.text = city.weather?.detailDescription
+        if let temp = city.info?.tempreture {
+            cell.weatherTempreture.text = "\(temp)"
+        }
         cell.weatherImage.backgroundColor = .yellow
         
         return cell
@@ -42,3 +73,35 @@ extension SWWeatherViewController {
     }
 }
 
+extension SWWeatherViewController: NSFetchedResultsControllerDelegate {
+    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        self.tableView.beginUpdates()
+    }
+    
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+        switch type {
+        case .insert:
+            if let indexPath = newIndexPath {
+                self.tableView.insertRows(at: [indexPath], with: .fade)
+            }
+        case .move:
+            if let indexPath = indexPath, let newIndexPath = newIndexPath {
+                self.tableView.moveRow(at: indexPath, to: newIndexPath)
+            }
+        case .update:
+            if let newIndexPath = newIndexPath {
+                self.tableView.reloadRows(at: [newIndexPath], with: .automatic)
+            }
+        case .delete:
+            if let indexPath = indexPath {
+                self.tableView.deleteRows(at: [indexPath], with: .fade)
+            }
+        default:
+            print("nothing for row")
+        }
+    }
+    
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        self.tableView.endUpdates()
+    }
+}
