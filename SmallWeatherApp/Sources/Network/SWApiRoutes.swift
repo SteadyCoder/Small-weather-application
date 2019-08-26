@@ -25,9 +25,11 @@ class SWApiRoutes: NSObject {
     
     static let scheme = "https"
     static let host = "api.openweathermap.org"
+    static let imageHost = "openweathermap.org"
     
     enum Weather: SWApiBase {
         case city
+        case iconImage
         
         static var baseUrl: URL {
             get {
@@ -39,16 +41,21 @@ class SWApiRoutes: NSObject {
             switch self {
             case .city:
                 return .GET
+            case .iconImage:
+                return .GET
             }
         }
         
         var urlComponents: URLComponents {
             var urlComponents = URLComponents()
             urlComponents.scheme = SWApiRoutes.scheme
-            urlComponents.host = SWApiRoutes.host
-            urlComponents.queryItems = [URLQueryItem(name: SWApiRoutes.apiTokenQueryKey, value: SWApiRoutes.apiToken)]
             switch self {
             case .city:
+                urlComponents.host = SWApiRoutes.host
+                urlComponents.queryItems = [URLQueryItem(name: SWApiRoutes.apiTokenQueryKey, value: SWApiRoutes.apiToken)]
+                urlComponents.path = self.path
+            case .iconImage:
+                urlComponents.host = SWApiRoutes.imageHost
                 urlComponents.path = self.path
             }
             return urlComponents
@@ -64,6 +71,8 @@ class SWApiRoutes: NSObject {
             switch self {
             case .city:
                 return "/data/2.5/weather"
+            case .iconImage:
+                return "/img/wn"
             }
         }
     }

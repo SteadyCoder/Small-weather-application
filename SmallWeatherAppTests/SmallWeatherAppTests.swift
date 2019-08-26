@@ -90,11 +90,10 @@ class SmallWeatherAppTests: XCTestCase {
         semaphore.wait(wallTimeout: .now() + 15)
     }
 
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measure {
-            
-        }
+    func testIconImageDownload() {
+        let semaphore = DispatchSemaphore(value: 0)
+        
+        
     }
 
 }

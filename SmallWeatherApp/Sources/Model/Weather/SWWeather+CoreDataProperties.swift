@@ -17,9 +17,10 @@ extension SWWeather {
         return NSFetchRequest<SWWeather>(entityName: "Weather")
     }
 
-    @NSManaged public var id: String
-    @NSManaged public var mainDescription: String?
     @NSManaged public var detailDescription: String?
     @NSManaged public var iconId: String?
+    @NSManaged public var id: String?
+    @NSManaged public var mainDescription: String?
+    @NSManaged public var iconImage: NSData?
 
 }

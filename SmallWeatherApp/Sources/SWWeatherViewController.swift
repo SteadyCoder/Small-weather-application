@@ -21,15 +21,14 @@ class SWWeatherViewController: UITableViewController {
         self.refreshControl?.addTarget(self, action: #selector(refreshDidChange(_:)), for: .valueChanged)
         
         self.refreshControl?.beginRefreshing()
-        viewModel.loadCitiesData { [weak self] in
-            self?.tableView.reloadData()
+        self.viewModel.loadCitiesData { [weak self] in
             self?.refreshControl?.endRefreshing()
         }
     }
     
     @objc func refreshDidChange(_ refreshControl: UIRefreshControl) {
-        self.viewModel.loadCitiesData {
-            self.refreshControl?.endRefreshing()
+        self.viewModel.loadCitiesData { [weak self] in
+            self?.refreshControl?.endRefreshing()
         }
     }
     
@@ -61,7 +60,14 @@ extension SWWeatherViewController {
         if let temp = city.info?.celciusTempreture {
             cell.weatherTempreture.text = temp + "º"
         }
-        cell.weatherImage.backgroundColor = .yellow
+        
+        cell.weatherImage?.image = city.weather?.image
+        city.weather?.downloadIconImage(withContext: SWModelManager.shared.model.viewContext, loadCompletion: {
+            DispatchQueue.main.async {
+                cell.weatherImage.image = city.weather?.image
+            }
+        })
+        
         
         return cell
     }

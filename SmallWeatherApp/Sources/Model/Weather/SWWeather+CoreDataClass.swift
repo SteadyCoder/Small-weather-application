@@ -9,6 +9,7 @@
 
 import Foundation
 import CoreData
+import UIKit
 
 @objc(SWWeather)
 public class SWWeather: NSManagedObject, Decodable {
@@ -33,5 +34,26 @@ public class SWWeather: NSManagedObject, Decodable {
         case main = "main"
         case description = "description"
         case iconId = "icon"
+    }
+    
+    var image: UIImage? {
+        guard let imageData = iconImage as Data? else {
+            return nil
+        }
+        return UIImage(data: imageData)
+    }
+    
+    func downloadIconImage(withContext context: NSManagedObjectContext, loadCompletion: (() -> Void)? = nil) {
+        guard let iconId = self.iconId else {
+            return
+        }
+        SWRequestManager.shared.getIconImage(withIconId: iconId, withImageFormat: .x2png) { [weak self] (data, success, error) in
+            if success, let imageData = data {
+                self?.iconImage = imageData as NSData
+                if let completion = loadCompletion {
+                    completion()
+                }
+            }
+        }
     }
 }

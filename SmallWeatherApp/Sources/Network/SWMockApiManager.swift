@@ -66,4 +66,10 @@ class SWMockApiManager: SWRestAPI {
         }
     }
     
+    func getIconImage(withIconId: String = "10d", withImageFormat: ImageFormat = ImageFormat.x2png, completion: IconImageCompletion?) {
+        if let compl = completion {
+            let image = #imageLiteral(resourceName: "location")
+            compl(image.pngData(), true, nil)
+        }
+    }
 }
