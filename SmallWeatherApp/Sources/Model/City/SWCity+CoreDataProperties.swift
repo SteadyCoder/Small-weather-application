@@ -17,8 +17,10 @@ extension SWCity {
         return NSFetchRequest<SWCity>(entityName: "City")
     }
 
-    @NSManaged public var id: String?
+    @NSManaged public var id: Int64
+    @NSManaged public var name: String?
     @NSManaged public var weather: SWWeather?
     @NSManaged public var info: SWMainWeatherInfo?
+    @NSManaged public var systemInfo: SWSystemInfo?
 
 }

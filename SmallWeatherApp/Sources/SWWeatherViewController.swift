@@ -9,12 +9,12 @@
 import UIKit
 
 class SWWeatherViewController: UITableViewController {
+    let viewModel = SWWeatherViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
-        SWRequestManager.shared.getWeather(withCityName: "Kiev") { (success, error) in
-            print("done")
+        viewModel.loadCitiesData {
+            print("city data loaded")
         }
     }
 
@@ -22,13 +22,14 @@ class SWWeatherViewController: UITableViewController {
 
 extension SWWeatherViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3
+        return self.viewModel.listOfCitiesName.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: SWWeatherTableViewCell.tableCellIdentifier, for: indexPath) as! SWWeatherTableViewCell
+        let row = indexPath.row
         
-        cell.cityLabel.text = "Kyiv, UA"
+        cell.cityLabel.text = self.viewModel.listOfCitiesName[row]
         cell.cityWeatherDescription.text = "Sunny"
         cell.weatherTempreture.text = "15º"
         cell.weatherImage.backgroundColor = .yellow

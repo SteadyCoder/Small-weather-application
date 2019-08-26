@@ -17,7 +17,8 @@ extension SWSystemInfo {
         return NSFetchRequest<SWSystemInfo>(entityName: "SystemInfo")
     }
 
-    @NSManaged public var id: String?
+    @NSManaged public var id: Int32
     @NSManaged public var type: Int32
+    @NSManaged public var country: String?
 
 }

@@ -12,7 +12,8 @@ protocol SWRestAPI: class {
     typealias BaseCompletion = (_ success: Bool, _ error: Error?) -> Void
     typealias FullCompletion = (_ jsonResponse: [String: Any]?, _ success: Bool, _ responseCode: Int?, _ error: NSError?) -> Void
     
-    func getWeather(withCityName cityName: String, completion: BaseCompletion?)
+    typealias WeatherCompletion = (_ city: SWCity?, _ success: Bool, _ error: Error?) -> Void
+    func getWeather(withCityName cityName: String, completion: WeatherCompletion?)
 }
 
 class SWRequestManager: SWRestAPI {
@@ -28,8 +29,7 @@ class SWRequestManager: SWRestAPI {
         return URLSession(configuration: configuration)
     }()
     
-    
-    func getWeather(withCityName cityName: String, completion: BaseCompletion? = nil) {
+    func getWeather(withCityName cityName: String, completion: WeatherCompletion? = nil) {
         let url = SWApiRoutes.Weather.city.url(with: ["q": cityName])
         
         var urlRequest = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: 15)
@@ -38,11 +38,16 @@ class SWRequestManager: SWRestAPI {
         session.dataTask(withURLRequest: urlRequest) { (json, success, code, error) in
             if let compl = completion {
                 if let error = error {
-                    compl(false, error)
+                    compl(nil, false, error)
                 } else if success {
-                    compl(true, nil)
+                    if let js = json, let data = try? JSONSerialization.data(withJSONObject: js) {
+                        let city = try? JSONDecoder().decode(SWCity.self, from: data)
+                        compl(city, true, nil)
+                    } else {
+                        compl(nil, true, nil)
+                    }
                 } else {
-                    compl(false, nil)
+                    compl(nil, false, nil)
                 }
             }
         }.resume()

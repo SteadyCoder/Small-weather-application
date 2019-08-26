@@ -10,7 +10,21 @@
 import Foundation
 import CoreData
 
-
-public class SWMainWeatherInfo: NSManagedObject {
-
+@objc(SWMainWeatherInfo)
+public class SWMainWeatherInfo: NSManagedObject, Decodable {
+    public required convenience init(from decoder: Decoder) throws {
+        self.init(context: SWModelManager.shared.model.viewContext)
+        
+        let container = try decoder.container(keyedBy: SWMainWeatherInfo.CodingKeys.self)
+        
+        do {
+            self.tempreture = try container.decodeIfPresent(Double.self, forKey: .tempreture) ?? 0
+        } catch {
+            print("Decode \(SWMainWeatherInfo.self) error \(error)")
+        }
+    }
+    
+    enum CodingKeys: String, CodingKey {
+        case tempreture = "temp"
+    }
 }

@@ -10,24 +10,33 @@
 import Foundation
 import CoreData
 
-
+@objc(SWCity)
 public class SWCity: NSManagedObject, Decodable {
     public required convenience init(from decoder: Decoder) throws {
         self.init(context: SWModelManager.shared.model.viewContext)
         
-        let container = try decoder.container(keyedBy: SKCoupon.CodingKeys.self)
+        let container = try decoder.container(keyedBy: SWCity.CodingKeys.self)
         
         do {
-            self.discounter = try container.decodeIfPresent(SKDiscounter.self, forKey: .discounter)
+            self.id = try container.decode(Int64.self, forKey: .id)
+            self.name = try container.decodeIfPresent(String.self, forKey: .name)
+            if let weatherList = try container.decodeIfPresent([SWWeather].self, forKey: .weatherInfo) {
+                if let weather = weatherList.first {
+                    self.weather = weather
+                }
+            }
+            self.info = try container.decodeIfPresent(SWMainWeatherInfo.self, forKey: .mainInfo)
+            self.systemInfo = try container.decodeIfPresent(SWSystemInfo.self, forKey: .systemInfo)
         } catch {
-            print("Decode coupon error \(error)")
+            print("Decode \(SWCity.self) error \(error)")
         }
     }
     
     enum CodingKeys: String, CodingKey {
         case id = "id"
-        case weather = "weather"
-        case main = "main"
-        case couponBalance = "icon"
+        case name = "name"
+        case weatherInfo = "weather"
+        case systemInfo = "sys"
+        case mainInfo = "main"
     }
 }
