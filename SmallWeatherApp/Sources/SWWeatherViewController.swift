@@ -61,10 +61,14 @@ extension SWWeatherViewController {
             cell.weatherTempreture.text = temp + "º"
         }
         
+        city.weather?.image == nil ? cell.activityIndicatorImageLoading.startAnimating() : cell.activityIndicatorImageLoading.stopAnimating()
+        
         cell.weatherImage?.image = city.weather?.image
         city.weather?.downloadIconImage(withContext: SWModelManager.shared.model.viewContext, loadCompletion: {
             DispatchQueue.main.async {
+                _ = SWModelManager.shared.model.viewContext.saveContext()
                 cell.weatherImage.image = city.weather?.image
+                cell.activityIndicatorImageLoading.stopAnimating()
             }
         })
         
