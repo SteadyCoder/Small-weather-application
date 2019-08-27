@@ -12,6 +12,7 @@ class SWWeatherTableViewCell: UITableViewCell {
     static let tableCellIdentifier = "weatherCell"
     
     @IBOutlet weak var weatherImage: UIImageView!
+    /// Acitvity indicator used for showing image loading from server.
     @IBOutlet weak var activityIndicatorImageLoading: UIActivityIndicatorView!
     @IBOutlet weak var cityLabel: UILabel!
     @IBOutlet weak var cityWeatherDescription: UILabel!

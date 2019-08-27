@@ -19,9 +19,11 @@ protocol SWApiBase {
     var method: HTTPMethod { get }
 }
 
+/// Class responsible for urls and other constatns related to rest api.
 class SWApiRoutes: NSObject {
     private static let apiToken = "91c38bb9e9409896a7d89912d9eb56fd"
     private static let apiTokenQueryKey = "appid"
+    static let cityRequestParameterKey = "q"
     
     static let scheme = "https"
     static let host = "api.openweathermap.org"

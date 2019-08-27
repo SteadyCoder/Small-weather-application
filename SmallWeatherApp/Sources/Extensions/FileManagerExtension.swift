@@ -12,7 +12,7 @@ extension FileManager {
     func moveDownloadFileToTemporaryDirectory(withSourceUrl url: URL) -> URL? {
         let newUrl = URL(fileURLWithPath: NSTemporaryDirectory() + UUID().uuidString + ".png")
         do {
-            try? self.moveItem(at: url, to: newUrl)
+            try self.moveItem(at: url, to: newUrl)
         } catch {
             return nil
         }

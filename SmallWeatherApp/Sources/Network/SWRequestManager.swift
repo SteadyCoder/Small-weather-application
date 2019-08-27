@@ -25,6 +25,7 @@ protocol SWRestAPI: class {
     func getIconImage(withIconId iconId: String, withImageFormat imageFormat: ImageFormat,  completion: IconImageCompletion?)
 }
 
+/// Real api request manager
 class SWRequestManager: SWRestAPI {
     static let shared: SWRestAPI = SWRequestManager()
     
@@ -39,7 +40,7 @@ class SWRequestManager: SWRestAPI {
     }()
     
     func getWeather(withCityName cityName: String, completion: WeatherCompletion? = nil) {
-        let url = SWApiRoutes.Weather.city.url(with: ["q": cityName])
+        let url = SWApiRoutes.Weather.city.url(with: [SWApiRoutes.cityRequestParameterKey: cityName])
         
         var urlRequest = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: 15)
         urlRequest.httpMethod = SWApiRoutes.Weather.city.method.rawValue
@@ -51,6 +52,7 @@ class SWRequestManager: SWRestAPI {
                         compl(nil, false, json?.description, error)
                     } else if success {
                         if let js = json {
+                            // saving last update info date for showing it on UI if needed.
                             SWUserDefaults.shared.lastUpdateTime = Date()
                             compl(js, true, nil, nil)
                         } else {

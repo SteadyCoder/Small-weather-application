@@ -12,7 +12,7 @@ extension Date {
     var toTimeString: String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "hh:mm"
-        dateFormatter.locale = Locale.autoupdatingCurrent// init(identifier: "en_GB")
+        dateFormatter.locale = Locale.autoupdatingCurrent
         
         return dateFormatter.string(from: self)
     }

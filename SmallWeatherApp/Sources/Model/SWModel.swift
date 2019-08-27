@@ -1,14 +1,15 @@
 //
-//  SKModelController.swift
-//  Skidka71
+//  SWModelController.swift
+//  SmallWeatherApp
 //
 //  Created by Ivan Tkachenko on 5/4/19.
-//  Copyright © 2019 yorich. All rights reserved.
+//  Copyright © 2019 steady. All rights reserved.
 //
 
 import UIKit
 import CoreData
 
+/// Class responsible for creating Core Data model.
 class SWModel: NSObject {
     static let skidka71ModelName = "SmallWeatherApp"
     

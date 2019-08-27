@@ -8,6 +8,7 @@
 
 import UIKit
 
+/// Mock api reqeust manager. Used generaly for testing.
 class SWMockApiManager: SWRestAPI {
     func getWeather(withCityName cityName: String, completion: WeatherCompletion?) {
         let testResponseData =

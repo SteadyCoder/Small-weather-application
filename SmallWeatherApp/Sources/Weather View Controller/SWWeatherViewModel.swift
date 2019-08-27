@@ -9,13 +9,16 @@
 import UIKit
 
 protocol SWWeatherViewModelDelegate: AnyObject {
-    func loadOfCities(successful: Bool)
+    func loadOfCity(successful: Bool)
 }
 
 class SWWeatherViewModel: NSObject {
     var listOfCitiesName: [String] = ["Kiev", "London", "Toronto"]
     weak var delegate: SWWeatherViewModelDelegate?
     
+    /// Constructor for view model.
+    ///
+    /// - Parameter citiesName: the list of cities to load. If you pass nil here the load method will use default list of cities.
     init(withCitiesNames citiesName: [String]? = nil) {
         if let names = citiesName {
             self.listOfCitiesName = names
@@ -43,7 +46,7 @@ class SWWeatherViewModel: NSObject {
                     let newCity = try? JSONDecoder().decode(SWCity.self, from: cityData)
                     _ = newCity?.managedObjectContext?.saveContext()
                 }
-                self?.delegate?.loadOfCities(successful: success)
+                self?.delegate?.loadOfCity(successful: success)
                 dispatchGroup.leave()
             })
         }

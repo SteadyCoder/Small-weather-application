@@ -38,7 +38,7 @@ class SWWeatherViewController: UITableViewController, SWTopBarErrorMessage {
         self.topBarErrorLabel.textColor = .white
         
         SWInternetConnectionChecked.internetConnectionCheckerRun { (status) in
-            self.loadOfCities(successful: status)
+            self.loadOfCity(successful: status)
         }
     }
     
@@ -67,7 +67,7 @@ class SWWeatherViewController: UITableViewController, SWTopBarErrorMessage {
 }
 
 extension SWWeatherViewController: SWWeatherViewModelDelegate {
-    func loadOfCities(successful: Bool) {
+    func loadOfCity(successful: Bool) {
         if !successful {
             let showTime = SWUserDefaults.shared.lastUpdateTime?.toTimeString ?? ""
             self.showTopBarErrorMessage(viewController: self, withFrameToShow: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 50), withText: "Offline mode. This weather was actual at \(showTime)")

@@ -27,9 +27,9 @@ class SmallWeatherAppTests: XCTestCase {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
         mockApi.getWeather(withCityName: citiesName[0]) { (city, success, errorMessage, error) in
-            print("error message \(errorMessage)")
+            print("error message \(String(describing: errorMessage))")
             assert(success)
-            print(city)
+            print(city as Any)
         }
     }
     
@@ -38,10 +38,10 @@ class SmallWeatherAppTests: XCTestCase {
         
         realApi.getWeather(withCityName: "Kyiv") { (city, succes, errorMessage, error) in
             if succes {
-                print(city)
+                print(city as Any)
             } else {
-                print(error)
-                print(errorMessage)
+                print(error as Any)
+                print(errorMessage as Any)
             }
             assert(succes)
             semaphore.signal()
@@ -57,8 +57,8 @@ class SmallWeatherAppTests: XCTestCase {
         DispatchQueue.concurrentPerform(iterations: citiesName.count) { (cityIndex) in
             dispatchGroup.enter()
             realApi.getWeather(withCityName: citiesName[cityIndex], completion: { (city, success, errorMessage, error) in
-                print(city)
-                print(errorMessage)
+                print(city as Any)
+                print(errorMessage as Any)
                 dispatchGroup.leave()
             })
         }
@@ -67,7 +67,7 @@ class SmallWeatherAppTests: XCTestCase {
             semaphore.signal()
         }
         
-        semaphore.wait(wallTimeout: .now() + 15)
+        _ = semaphore.wait(wallTimeout: .now() + 15)
     }
     
     func testDispatchGroupLoopWeatherRequest() {
@@ -77,8 +77,8 @@ class SmallWeatherAppTests: XCTestCase {
         for city in citiesName {
             dispatchGroup.enter()
             realApi.getWeather(withCityName: city) { (city, success, errorMessage, error) in
-                print(city)
-                print(errorMessage)
+                print(city as Any)
+                print(errorMessage as Any)
                 dispatchGroup.leave()
             }
         }
@@ -87,13 +87,7 @@ class SmallWeatherAppTests: XCTestCase {
             semaphore.signal()
         }
         
-        semaphore.wait(wallTimeout: .now() + 15)
-    }
-
-    func testIconImageDownload() {
-        let semaphore = DispatchSemaphore(value: 0)
-        
-        
+        _ = semaphore.wait(wallTimeout: .now() + 15)
     }
 
 }
