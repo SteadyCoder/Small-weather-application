@@ -26,6 +26,11 @@
 		60DDF4B92314598F0083B84D /* NSManagedObjectExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60DDF4B82314598F0083B84D /* NSManagedObjectExtension.swift */; };
 		60DDF4BB231460460083B84D /* JsonExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60DDF4BA231460460083B84D /* JsonExtension.swift */; };
 		60DDF4BE231471A90083B84D /* FileManagerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60DDF4BD231471A90083B84D /* FileManagerExtension.swift */; };
+		60DDF4C22314F2890083B84D /* SWUserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60DDF4C12314F2890083B84D /* SWUserDefaults.swift */; };
+		60DDF4C42314F5330083B84D /* SWReachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60DDF4C32314F5330083B84D /* SWReachability.swift */; };
+		60DDF4C62314F7130083B84D /* DateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60DDF4C52314F7130083B84D /* DateExtension.swift */; };
+		60DDF4C82314F8CC0083B84D /* UIViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60DDF4C72314F8CC0083B84D /* UIViewControllerExtension.swift */; };
+		60DDF4CA2314FDB20083B84D /* SWInternetConnectionChecked.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60DDF4C92314FDB20083B84D /* SWInternetConnectionChecked.swift */; };
 		60ECA12A2313C3B5000D61A2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60ECA1292313C3B5000D61A2 /* AppDelegate.swift */; };
 		60ECA12C2313C3B5000D61A2 /* SWWeatherViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60ECA12B2313C3B5000D61A2 /* SWWeatherViewController.swift */; };
 		60ECA12F2313C3B5000D61A2 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 60ECA12D2313C3B5000D61A2 /* Main.storyboard */; };
@@ -74,6 +79,11 @@
 		60DDF4BA231460460083B84D /* JsonExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JsonExtension.swift; sourceTree = "<group>"; };
 		60DDF4BC2314652F0083B84D /* SmallWeatherApp2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = SmallWeatherApp2.xcdatamodel; sourceTree = "<group>"; };
 		60DDF4BD231471A90083B84D /* FileManagerExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileManagerExtension.swift; sourceTree = "<group>"; };
+		60DDF4C12314F2890083B84D /* SWUserDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SWUserDefaults.swift; sourceTree = "<group>"; };
+		60DDF4C32314F5330083B84D /* SWReachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SWReachability.swift; sourceTree = "<group>"; };
+		60DDF4C52314F7130083B84D /* DateExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtension.swift; sourceTree = "<group>"; };
+		60DDF4C72314F8CC0083B84D /* UIViewControllerExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewControllerExtension.swift; sourceTree = "<group>"; };
+		60DDF4C92314FDB20083B84D /* SWInternetConnectionChecked.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SWInternetConnectionChecked.swift; sourceTree = "<group>"; };
 		60ECA1262313C3B5000D61A2 /* SmallWeatherApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SmallWeatherApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		60ECA1292313C3B5000D61A2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		60ECA12B2313C3B5000D61A2 /* SWWeatherViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SWWeatherViewController.swift; sourceTree = "<group>"; };
@@ -119,12 +129,11 @@
 			isa = PBXGroup;
 			children = (
 				60ECA1292313C3B5000D61A2 /* AppDelegate.swift */,
-				60ECA12B2313C3B5000D61A2 /* SWWeatherViewController.swift */,
-				60DDF4B4231435D60083B84D /* SWWeatherViewModel.swift */,
-				60DDF48B2313C7E00083B84D /* SWWeatherTableViewCell.swift */,
+				60DDF4BF2314F2370083B84D /* Weather View Controller */,
 				60DDF4902313CBB10083B84D /* Network */,
 				60DDF48F2313CAF60083B84D /* Model */,
 				60DDF4952313E0930083B84D /* Extensions */,
+				60DDF4C02314F2790083B84D /* Helpers */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -169,6 +178,8 @@
 				60DDF4B82314598F0083B84D /* NSManagedObjectExtension.swift */,
 				60DDF4BA231460460083B84D /* JsonExtension.swift */,
 				60DDF4BD231471A90083B84D /* FileManagerExtension.swift */,
+				60DDF4C52314F7130083B84D /* DateExtension.swift */,
+				60DDF4C72314F8CC0083B84D /* UIViewControllerExtension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -207,6 +218,26 @@
 				60DDF4A523142BD10083B84D /* SWMainWeatherInfo+CoreDataProperties.swift */,
 			);
 			path = "Main Weather Info";
+			sourceTree = "<group>";
+		};
+		60DDF4BF2314F2370083B84D /* Weather View Controller */ = {
+			isa = PBXGroup;
+			children = (
+				60ECA12B2313C3B5000D61A2 /* SWWeatherViewController.swift */,
+				60DDF4B4231435D60083B84D /* SWWeatherViewModel.swift */,
+				60DDF48B2313C7E00083B84D /* SWWeatherTableViewCell.swift */,
+			);
+			path = "Weather View Controller";
+			sourceTree = "<group>";
+		};
+		60DDF4C02314F2790083B84D /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				60DDF4C12314F2890083B84D /* SWUserDefaults.swift */,
+				60DDF4C32314F5330083B84D /* SWReachability.swift */,
+				60DDF4C92314FDB20083B84D /* SWInternetConnectionChecked.swift */,
+			);
+			path = Helpers;
 			sourceTree = "<group>";
 		};
 		60ECA11D2313C3B5000D61A2 = {
@@ -398,8 +429,11 @@
 				60DDF4942313D15C0083B84D /* SWRequestManager.swift in Sources */,
 				60ECA1322313C3B5000D61A2 /* SmallWeatherApp.xcdatamodeld in Sources */,
 				60DDF49F23142B9B0083B84D /* SWCity+CoreDataClass.swift in Sources */,
+				60DDF4CA2314FDB20083B84D /* SWInternetConnectionChecked.swift in Sources */,
 				60ECA12C2313C3B5000D61A2 /* SWWeatherViewController.swift in Sources */,
 				60DDF4AF23142BFD0083B84D /* SWWeather+CoreDataProperties.swift in Sources */,
+				60DDF4C42314F5330083B84D /* SWReachability.swift in Sources */,
+				60DDF4C62314F7130083B84D /* DateExtension.swift in Sources */,
 				60ECA12A2313C3B5000D61A2 /* AppDelegate.swift in Sources */,
 				60DDF4B323142CBA0083B84D /* SWModel.swift in Sources */,
 				60DDF4B223142CBA0083B84D /* SWModelManager.swift in Sources */,
@@ -409,6 +443,8 @@
 				60DDF4922313CBC60083B84D /* SWApiRoutes.swift in Sources */,
 				60DDF4A723142BD10083B84D /* SWMainWeatherInfo+CoreDataProperties.swift in Sources */,
 				60DDF4AE23142BFD0083B84D /* SWWeather+CoreDataClass.swift in Sources */,
+				60DDF4C22314F2890083B84D /* SWUserDefaults.swift in Sources */,
+				60DDF4C82314F8CC0083B84D /* UIViewControllerExtension.swift in Sources */,
 				60DDF4BE231471A90083B84D /* FileManagerExtension.swift in Sources */,
 				60DDF4A023142B9B0083B84D /* SWCity+CoreDataProperties.swift in Sources */,
 				60DDF4B92314598F0083B84D /* NSManagedObjectExtension.swift in Sources */,
@@ -587,6 +623,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 982E46E4T5;
 				INFOPLIST_FILE = SmallWeatherApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -604,6 +641,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 982E46E4T5;
 				INFOPLIST_FILE = SmallWeatherApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

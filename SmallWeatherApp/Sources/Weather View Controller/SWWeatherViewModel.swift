@@ -8,8 +8,13 @@
 
 import UIKit
 
+protocol SWWeatherViewModelDelegate: AnyObject {
+    func loadOfCities(successful: Bool)
+}
+
 class SWWeatherViewModel: NSObject {
     var listOfCitiesName: [String] = ["Kiev", "London", "Toronto"]
+    weak var delegate: SWWeatherViewModelDelegate?
     
     init(withCitiesNames citiesName: [String]? = nil) {
         if let names = citiesName {
@@ -24,7 +29,7 @@ class SWWeatherViewModel: NSObject {
         
         DispatchQueue.concurrentPerform(iterations: listOfCitiesName.count) { (index) in
             dispatchGroup.enter()
-            SWRequestManager.shared.getWeather(withCityName: self.listOfCitiesName[index], completion: { (cityJson, success, errorMessage, error) in
+            SWRequestManager.shared.getWeather(withCityName: self.listOfCitiesName[index], completion: { [weak self] (cityJson, success, errorMessage, error) in
                 let context = SWModelManager.shared.model.viewContext
                 
                 if success, let city = cityJson, let cityId = city[SWCity.CodingKeys.id.rawValue] as? Int,
@@ -38,6 +43,7 @@ class SWWeatherViewModel: NSObject {
                     let newCity = try? JSONDecoder().decode(SWCity.self, from: cityData)
                     _ = newCity?.managedObjectContext?.saveContext()
                 }
+                self?.delegate?.loadOfCities(successful: success)
                 dispatchGroup.leave()
             })
         }

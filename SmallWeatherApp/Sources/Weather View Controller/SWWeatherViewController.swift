@@ -9,13 +9,20 @@
 import UIKit
 import CoreData
 
-class SWWeatherViewController: UITableViewController {
+protocol SWTopBarErrorMessage where Self: UIViewController {
+    var topBarErrorLabel: UILabel! { get set }
+}
+
+class SWWeatherViewController: UITableViewController, SWTopBarErrorMessage {
+    var topBarErrorLabel: UILabel!
+    
     let viewModel = SWWeatherViewModel()
     var fetchedResultController: NSFetchedResultsController<SWCity>?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setupFetchedResultController()
+        self.viewModel.delegate = self
         
         self.refreshControl = UIRefreshControl()
         self.refreshControl?.addTarget(self, action: #selector(refreshDidChange(_:)), for: .valueChanged)
@@ -23,6 +30,15 @@ class SWWeatherViewController: UITableViewController {
         self.refreshControl?.beginRefreshing()
         self.viewModel.loadCitiesData { [weak self] in
             self?.refreshControl?.endRefreshing()
+        }
+        
+        self.topBarErrorLabel = UILabel()
+        self.topBarErrorLabel.textAlignment = .center
+        self.topBarErrorLabel.backgroundColor = .red
+        self.topBarErrorLabel.textColor = .white
+        
+        SWInternetConnectionChecked.internetConnectionCheckerRun { (status) in
+            self.loadOfCities(successful: status)
         }
     }
     
@@ -47,6 +63,17 @@ class SWWeatherViewController: UITableViewController {
         self.fetchedResultController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: SWModelManager.shared.model.viewContext, sectionNameKeyPath: nil, cacheName: nil)
         self.fetchedResultController?.delegate = self
         try? self.fetchedResultController?.performFetch()
+    }
+}
+
+extension SWWeatherViewController: SWWeatherViewModelDelegate {
+    func loadOfCities(successful: Bool) {
+        if !successful {
+            let showTime = SWUserDefaults.shared.lastUpdateTime?.toTimeString ?? ""
+            self.showTopBarErrorMessage(viewController: self, withFrameToShow: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 50), withText: "Offline mode. This weather was actual at \(showTime)")
+        } else {
+            self.hideTopBarErrorMessage(viewController: self)
+        }
     }
 }
 

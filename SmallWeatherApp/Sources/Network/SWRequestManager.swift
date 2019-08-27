@@ -45,17 +45,20 @@ class SWRequestManager: SWRestAPI {
         urlRequest.httpMethod = SWApiRoutes.Weather.city.method.rawValue
         
         session.dataTask(withURLRequest: urlRequest) { (json, success, code, error) in
-            if let compl = completion {
-                if let error = error {
-                    compl(nil, false, json?.description, error)
-                } else if success {
-                    if let js = json {
-                        compl(js, true, nil, nil)
+            DispatchQueue.main.async {
+                if let compl = completion {
+                    if let error = error {
+                        compl(nil, false, json?.description, error)
+                    } else if success {
+                        if let js = json {
+                            SWUserDefaults.shared.lastUpdateTime = Date()
+                            compl(js, true, nil, nil)
+                        } else {
+                            compl(nil, false, json?.description, nil)
+                        }
                     } else {
                         compl(nil, false, json?.description, nil)
                     }
-                } else {
-                    compl(nil, false, json?.description, nil)
                 }
             }
         }.resume()
