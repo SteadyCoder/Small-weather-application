@@ -49,6 +49,8 @@ class SmallWeatherAppTests: XCTestCase {
         semaphore.wait()
     }
     
+    
+    /// This tests a little bit specific. It made for testing concurrent perfromance. In test environment dispatch group with several enters doesn't notify about the end and semaphore doesn't goes to 0, so it is waiting 5 sec.
     func testConcurrentLoopWeatherRequest() {
         let semaphore = DispatchSemaphore(value: 0)
         let dispatchGroup = DispatchGroup()
@@ -67,9 +69,10 @@ class SmallWeatherAppTests: XCTestCase {
             semaphore.signal()
         }
         
-        _ = semaphore.wait(wallTimeout: .now() + 15)
+        _ = semaphore.wait(wallTimeout: .now() + 5)
     }
     
+    /// This tests a little bit specific. It made for testing dispatch group perfromance. In test environment dispatch group with several enters doesn't notify about the end and semaphore doesn't goes to 0, so it is waiting 5 sec.
     func testDispatchGroupLoopWeatherRequest() {
         let semaphore = DispatchSemaphore(value: 0)
         let dispatchGroup = DispatchGroup()
@@ -87,7 +90,7 @@ class SmallWeatherAppTests: XCTestCase {
             semaphore.signal()
         }
         
-        _ = semaphore.wait(wallTimeout: .now() + 15)
+        _ = semaphore.wait(wallTimeout: .now() + 5)
     }
 
 }
