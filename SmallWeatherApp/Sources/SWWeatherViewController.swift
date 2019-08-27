@@ -32,6 +32,14 @@ class SWWeatherViewController: UITableViewController {
         }
     }
     
+    @IBAction func refreshBarButtonDidPress(_ barButtonItem: UIBarButtonItem) {
+        self.refreshControl?.beginRefreshing()
+        self.viewModel.loadCitiesData { [weak self] in
+            self?.refreshControl?.endRefreshing()
+        }
+    }
+    
+    
     func setupFetchedResultController() {
         let fetchRequest: NSFetchRequest<SWCity> = SWCity.fetchRequest()
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: NSStringFromSelector(#selector(getter: SWCity.id)), ascending: true)]
